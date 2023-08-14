@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 
@@ -33,19 +34,20 @@ const init = async () => {
     },
   });
 
+  // registrasi plugin eksternal
   await server.register([
     {
       plugin: Jwt,
     },
   ]);
 
-  server.auth.strategy('notesapp_jwt', 'jwt',{
+  server.auth.strategy('notesapp_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
       aud: false,
       iss: false,
       sub: false,
-      maxAgeSec: process.env.ACCESS_TOKEN_AGE, 
+      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
     },
     validate: (artifacts) => ({
       isValid: true,
@@ -78,7 +80,7 @@ const init = async () => {
         tokenManager: TokenManager,
         validator: AuthenticationsValidator, 
       }
-    }
+    },
   ]);
   await server.start();
   console.log(`Server berjalan pada ${server.info.uri}`);
