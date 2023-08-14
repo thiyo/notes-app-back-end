@@ -71,7 +71,7 @@ class AuthenticationsHandler {
             data: {
               accessToken,
             },
-      };
+          };
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = res.response({
