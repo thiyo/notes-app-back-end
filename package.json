@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node ./src/server.js",
+    "dev": "nodemon ./src/server.js",
     "lint": "eslint ./src",
     "migrate": "node-pg-migrate"
   },
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "@hapi/hapi": "^20.1.0",
+    "@hapi/jwt": "^3.2.0",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "joi": "^17.9.2",
     "nanoid": "^3.1.20",
