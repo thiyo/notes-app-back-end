@@ -56,16 +56,22 @@ class AuthenticationsHandler {
         }
     }
 
-    async putAuthenticationHandler(request, h){
+    async putAuthenticationHandler(request, res){
         try {
           this._validator.validatePutAuthenticationPayload(request.payload);
-
+ 
           const { refreshToken } = request.payload;
           await this._authenticationsService.verifyRefreshToken(refreshToken);
-          const {id} = this._tokenManager.verifyRefreshToken(refreshToken);
-
+          const { id } = this._tokenManager.verifyRefreshToken(refreshToken);
+    
           const accessToken = this._tokenManager.generateAccessToken({ id });
-            
+          return {
+            status: 'success',
+            message: 'Access Token berhasil diperbarui',
+            data: {
+              accessToken,
+            },
+      };
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = res.response({
@@ -93,7 +99,7 @@ class AuthenticationsHandler {
         this._validator.validateDeleteAuthenticationPayload(request.payload);
         const { refreshToken } = request.payload;
         await this._authenticationsService.verifyRefreshToken(refreshToken);
-        await this._authenticationsService.deleteAuthenticationHandler(refreshToken);
+        await this._authenticationsService.deleteRefreshToken(refreshToken);
 
         return {
           status: 'success',
