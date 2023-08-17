@@ -7,6 +7,7 @@ class UsersHandler {
 
         this.postUserHandler = this.postUserHandler.bind(this);
         this.getUserByIdHandler = this.getUserByIdHandler.bind(this);
+        this.getUsersByUsernameHandler = this.getUsersByUsernameHandler.bind(this);
     }
 
     async postUserHandler(request, res) {
@@ -77,6 +78,36 @@ class UsersHandler {
         }
     }
 
+    async getUsersByUsernameHandler(request, res) {
+        try {
+            const {username = ''} = request.query;
+            const users = await this._service.getUsersByUsername(username);
+
+            return {
+                status: 'success',
+                data: {
+                    users,
+                },
+            };
+        } catch (error) {
+            if(error instanceof ClientError){
+                const response = res.response({
+                    status: 'fail',
+                    message: error.message,
+                });
+                response.code(error.statusCode);
+                return response;
+            }
+
+            const response = res.response({
+                status: 'error',
+                message: 'Maaf, terjadi kesalahan pada server kami.',
+            });
+            response.code(500);
+            console.error(error);
+            return response;
+        }
+    }
 
 }
 module.exports = UsersHandler;
