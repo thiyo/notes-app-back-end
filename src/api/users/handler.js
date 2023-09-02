@@ -82,7 +82,6 @@ class UsersHandler {
         try {
             const {username = ''} = request.query;
             const users = await this._service.getUsersByUsername(username);
-
             return {
                 status: 'success',
                 data: {
